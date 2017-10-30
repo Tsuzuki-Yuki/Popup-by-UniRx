@@ -31,23 +31,25 @@ public class Popup {
         yield return PopupManager.instance.SetAllValue(popup);
         PopupManager.instance.popupBackground.SetActive(true);
 
+
         //Yes/Noの選択
         var yes = PopupManager.instance.yesButton.OnClickAsObservable().First().Select(_ => PopupManager.instance.yesButton);
         var no = PopupManager.instance.noButton.OnClickAsObservable().First().Select(_ => PopupManager.instance.noButton);
         var clickedButton = yes.Amb(no).ToYieldInstruction();
         yield return clickedButton;
 
+
         //Noだったらポップアップ終了
         if (clickedButton.Result == PopupManager.instance.noButton)
         {
-            PopupManager.instance.popupBackground.SetActive(false);
-            clickedButton.Result.gameObject.Parent().Parent().SetActive(false);  //PopupWindows自体を消す
+            PopupManager.instance.ClosePopup(popup);  //PopupWindows自体を消す
             observer.OnCompleted();
             yield break;
         }
 
         observer.OnNext(clickedButton.Result.gameObject);
         clickedButton.Result.gameObject.Parent().SetActive(false);
+
 
         //A/B/Cの選択
         PopupManager.instance.toggleGroup.gameObject.Parent().SetActive(true);  //SecondQuestionを表示する
@@ -60,8 +62,8 @@ public class Popup {
         observer.OnNext(PopupManager.instance.toggleGroup.ActiveToggles().FirstOrDefault().gameObject);
         observer.OnCompleted();
 
+
         //ポップアップの終了
-        clickedButton.Result.gameObject.Parent().Parent().SetActive(false);
-        PopupManager.instance.popupBackground.SetActive(false);
+        PopupManager.instance.ClosePopup(popup);
     }
 }
