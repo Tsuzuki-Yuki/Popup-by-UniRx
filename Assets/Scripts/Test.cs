@@ -51,6 +51,8 @@ public class Test : MonoBehaviour {
        
     }
 
+
+
     public static IEnumerator ToggleCoroutine(IObserver<Toggle> observer, ToggleGroup toggleGroup){
         PopupManager.instance.toggleGroup.gameObject.Parent().SetActive(true);  //SecondQuestionを表示する
         while(!toggleGroup.AnyTogglesOn()){
@@ -61,6 +63,7 @@ public class Test : MonoBehaviour {
         yield return PopupManager.instance.answerButton.OnClickAsObservable().FirstOrDefault().ToYieldInstruction();
         observer.OnNext(toggleGroup.ActiveToggles().FirstOrDefault());
     }
+
 
 
 

@@ -41,4 +41,9 @@ public class PopupManager : MonoBehaviour
 
         yield return null;
     }
+
+    public void ClosePopup(GameObject popup){
+        Destroy(popup);
+        popupBackground.SetActive(false);
+    }
 }
